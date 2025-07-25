@@ -1,5 +1,7 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { sanitizeUrl } from '@/utils/sanitizeUrl';
+import styles from './TextEditor.module.css';
+import classNames from 'classnames';
 
 export type TextEditorProps = {
   html: string;
@@ -140,13 +142,13 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
     const isDisabled = !hasSelection || disabled;
 
     return (
-      <div style={styles.wrapper}>
-        <div style={styles.toolbar} data-toolbar>
+      <div className={styles.wrapper}>
+        <div className={styles.toolbar} data-toolbar>
           <button
             onClick={() => execCommand('bold')}
             onMouseDown={(e) => e.preventDefault()}
             disabled={isDisabled}
-            style={{ ...styles.button, ...(isDisabled && styles.disabled) }}
+            className={classNames(styles.button, isDisabled && styles.disabled)}
             title="굵게"
           >
             B
@@ -155,7 +157,7 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
           <select
             onChange={(e) => handleFontSize(Number(e.target.value))}
             disabled={isDisabled}
-            style={{ ...styles.select, ...(isDisabled && styles.disabled) }}
+            className={classNames(styles.select, isDisabled && styles.disabled)}
             title="글자 크기"
           >
             <option value="">크기</option>
@@ -171,7 +173,7 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
             onChange={(e) => execCommand('foreColor', e.target.value)}
             onMouseDown={(e) => e.preventDefault()}
             disabled={isDisabled}
-            style={{ ...styles.color, ...(isDisabled && styles.disabled) }}
+            className={classNames(styles.color, isDisabled && styles.disabled)}
             title="글자 색상"
           />
 
@@ -179,7 +181,7 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
             onClick={handleLink}
             onMouseDown={(e) => e.preventDefault()}
             disabled={isDisabled}
-            style={{ ...styles.button, ...(isDisabled && styles.disabled) }}
+            className={classNames(styles.button, isDisabled && styles.disabled)}
             title="링크"
           >
             🔗
@@ -191,10 +193,7 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
           suppressContentEditableWarning
           onInput={emitChange}
           onBlur={emitChange}
-          style={{
-            ...styles.editor,
-            backgroundColor: disabled ? '#f5f5f5' : '#fff',
-          }}
+          className={classNames(styles.editor, disabled && styles.disabled)}
           data-placeholder={placeholder}
         />
       </div>
@@ -203,80 +202,3 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
 );
 
 TextEditor.displayName = 'TextEditor';
-
-// TODO lucy: 추후 제거될 스타일
-const styles: { [key: string]: React.CSSProperties } = {
-  wrapper: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '10px',
-    padding: '20px',
-    border: '1px solid #ccc',
-    borderRadius: '8px',
-    backgroundColor: '#fff',
-  },
-  toolbar: {
-    display: 'flex',
-    gap: '8px',
-    flexWrap: 'wrap',
-    padding: '10px',
-    border: '1px solid #eee',
-    borderRadius: '4px',
-    backgroundColor: '#f9f9f9',
-  },
-  button: {
-    padding: '6px 12px',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-    backgroundColor: '#fff',
-    cursor: 'pointer',
-    fontWeight: 'bold',
-  },
-  select: {
-    padding: '6px 8px',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-    backgroundColor: '#fff',
-    cursor: 'pointer',
-  },
-  color: {
-    width: '40px',
-    height: '32px',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-    cursor: 'pointer',
-  },
-  disabled: {
-    opacity: 0.5,
-    cursor: 'not-allowed',
-  },
-  editor: {
-    minHeight: '200px',
-    padding: '12px',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-    fontFamily: 'monospace',
-    fontSize: '14px',
-    lineHeight: '1.5',
-    outline: 'none',
-    whiteSpace: 'pre-wrap',
-    overflowY: 'auto',
-  },
-  summary: {
-    cursor: 'pointer',
-    padding: '8px',
-    backgroundColor: '#f0f0f0',
-    borderRadius: '4px',
-    fontWeight: 'bold',
-  },
-  preview: {
-    marginTop: '8px',
-    padding: '12px',
-    backgroundColor: '#f8f8f8',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-    fontSize: '12px',
-    overflow: 'auto',
-    maxHeight: '150px',
-  },
-};
